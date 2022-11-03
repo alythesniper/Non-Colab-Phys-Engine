@@ -1,19 +1,20 @@
 #include <iostream>
-#include "raylib.h"
+#include "reality.h"
 
 int main()
 {
-    bool keepGameAlive = true;
-    InitWindow(800, 600, "Physics Engine");
-    SetWindowState(FLAG_VSYNC_HINT);
-    
-    while (keepGameAlive){
-        BeginDrawing();
-            ClearBackground(BLACK);
-            DrawFPS(0, 0);
-        EndDrawing();
-    }
-    
-    CloseWindow();
+	//create main "reality"
+	reality realityOne = reality();
+	
+	//game loop, returns one if <esc>
+	while (true)
+	{
+		if (realityOne.update() == 1)
+		{
+			break;
+		}
+	}
+
+	return 0;
 }
 
