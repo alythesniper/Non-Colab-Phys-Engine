@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="flatVectorcpp.cpp" />
+    <ClCompile Include="flatVector.cpp" />
     <ClCompile Include="Physics Engine.cpp" />
     <ClCompile Include="reality.cpp" />
   </ItemGroup>
