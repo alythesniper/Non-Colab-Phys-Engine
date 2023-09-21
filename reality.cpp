@@ -8,21 +8,19 @@ reality::reality()
 	camera.zoom = 1.0f;
 	camera.target = { 0.0f, 0.0f};
 	
-	//make screen origin center of the window
+	//move screen origin to center of window
 	camera.offset = { 400, 300 };
+}
+
+reality::~reality()
+{
+	CloseWindow();
 }
 
 
 int reality::update()
 {
-	//exit engine if <esc>
-	if (IsKeyDown(KEY_ESCAPE))
-	{
-		CloseWindow();
-		return 1;
-	}
-	
-	//camera rotation controlls
+	//camera rotation controls
 	if (IsKeyDown(KEY_RIGHT))
 	{
 		camera.rotation++;
@@ -40,12 +38,15 @@ int reality::update()
 	ClearBackground(BLACK);
 	DrawFPS(0, 0);
 	BeginMode2D(camera);
-		DrawRectangle(0, 0, 50, 50, RED);
+	
+	//DrawRectangle(0, 0, 50, 50, RED);
+	testVec->x = 90.0;
+	testVec->y = 200.0f;
+	DrawCircle(0, 0, testVec->length(*testVec), BLUE);
+	DrawLine(0, 0, testVec->x, testVec->y, GREEN);
+	
 	EndMode2D();
 	EndDrawing();
-	
-	
-	
 	return 0;
 }
 
