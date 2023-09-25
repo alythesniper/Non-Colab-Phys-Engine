@@ -18,30 +18,18 @@
     <ClCompile Include="Physics Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="flatVector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="reality.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rigidBody.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="flatMath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="reality.h">
+    <ClInclude Include="reality.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="flatMath.h">
+    <ClInclude Include="flatMath.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="flatVector.h">
+    <ClInclude Include="flatVector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rigidBody.h">
+    <ClInclude Include="rigidBody.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

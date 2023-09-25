@@ -139,17 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="flatMath.cpp" />
-    <ClCompile Include="flatVector.cpp" />
     <ClCompile Include="Physics Engine.cpp" />
-    <ClCompile Include="reality.cpp" />
-    <ClCompile Include="rigidBody.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="flatMath.h" />
-    <ClInclude Include="flatVector.h" />
-    <ClInclude Include="reality.h" />
-    <ClInclude Include="rigidBody.h" />
+    <ClInclude Include="flatMath.hpp" />
+    <ClInclude Include="flatVector.hpp" />
+    <ClInclude Include="reality.hpp" />
+    <ClInclude Include="rigidBody.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

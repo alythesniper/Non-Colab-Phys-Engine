@@ -52,8 +52,3 @@ bool FlatVector::operator == (FlatVector& b)
 	}
 }
 
-//convert to string
-string vecToString(FlatVector& a)
-{
-	return "x: " + std::to_string(a.x) + "y: " + std::to_string(a.y);
-}
