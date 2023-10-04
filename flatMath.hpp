@@ -2,9 +2,8 @@
 #include "flatVector.hpp"
 #include <cmath>
 
-class flatMath
+namespace flatMath
 {
-public:
 	float clamp(float value, float min, float max)
 	{
 		if (min == max)

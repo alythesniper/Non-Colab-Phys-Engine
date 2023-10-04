@@ -29,7 +29,10 @@
     <ClInclude Include="flatVector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rigidBody.hpp">
+    <ClInclude Include="flatBody.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="flatWorld.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

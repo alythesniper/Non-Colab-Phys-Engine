@@ -22,6 +22,18 @@ const struct FlatVector {
 	{
 		return FlatVector(x - b.x, y - b.y);
 	}
+	FlatVector operator += (const FlatVector& b)
+	{
+		this->x += b.x;
+		this->y += b.y;
+		return FlatVector(x + b.x, y + b.y);
+	}
+	FlatVector operator -= (const FlatVector& b)
+	{
+		this->x += b.x;
+		this->y += b.y;
+		return FlatVector(x - b.x, y - b.y);
+	}
 	FlatVector operator - ()
 	{
 		return FlatVector(-x, -y);
