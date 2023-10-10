@@ -30,7 +30,8 @@ namespace flatMath
 	}
 	float distance(FlatVector vec1, FlatVector vec2)
 	{
-		return sqrt(pow(sqrt(vec1.x * vec1.x + vec1.y * vec1.y - sqrt(vec1.x * vec1.x + vec1.y * vec1.y)), 2));
+		//return sqrt(pow(sqrt(vec1.x * vec1.x + vec1.y * vec1.y - sqrt(vec1.x * vec1.x + vec1.y * vec1.y)), 2));
+		return sqrt(pow((vec1.x - vec2.x), 2) + pow((vec1.y - vec2.y), 2));
 	}
 	FlatVector* normalise(FlatVector vec1)
 	{

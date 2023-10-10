@@ -2,6 +2,7 @@
 #include "flatVector.hpp"
 #include "flatMath.hpp"
 #include "flatBody.hpp"
+#include "collisions.hpp"
 
 #include "raylib.h"
 #include <vector>
@@ -30,7 +31,7 @@ public:
 		camera.target = { 0.0f, 0.0f };
 
 		//create required bodies
-		int bodyCount = 20;
+		int bodyCount = 200;
 		for (int i=0; i < bodyCount; i+=1)
 		{
 			int randWidth = -GetScreenWidth() / 2 + (rand() % static_cast<int>(GetScreenWidth() / 2
@@ -39,10 +40,11 @@ public:
 			int randHeight = -GetScreenHeight() / 2 + (rand() % static_cast<int>(GetScreenHeight() / 2
 				- -GetScreenHeight() / 2 + 1));
 			
-			bodies.push_back(createCircleBody(5, FlatVector(randWidth, randHeight), 5, 1, 1));
+			bodies.push_back(createCircleBody(30, FlatVector(randWidth, randHeight), 5, 1, 1));
 		}
 	}
 
+	//update function, runs every frame
 	int update()
 	{
 		
@@ -68,7 +70,8 @@ public:
 		//object movement
 		float dx = 0;
 		float dy = 0;
-		float speed = 10;
+		float speed = 30;
+		
 		if (IsKeyDown(KEY_A)) { dx--; }
 		if (IsKeyDown(KEY_D)) { dx++; }
 		//for some reason these have to be opposite
@@ -82,6 +85,25 @@ public:
 			bodies[0]->move(velocity);
 		}
 		
+		for (int i = 0; i < bodies.size()-1; i++)
+		{
+			flatBody* bodyA = bodies[i];
+			
+			for (int j = i+1; j < bodies.size(); j++)
+			{
+				
+				flatBody* bodyB = bodies[j];
+				FlatVector* normal = new FlatVector(0, 0);
+				float depth = 0;
+				if (collisions::intersectCircles(bodies[i]->position, bodyA->radius,
+					bodies[j]->position, bodyB->radius, normal, &depth))
+				{
+					bodyA->move(-*normal * depth * 1 / 2);
+					bodyB->move(*normal * depth * 1 / 2);
+				}
+				
+			}
+		}
 		//start drawing
 		BeginDrawing();
 		
@@ -90,14 +112,12 @@ public:
 		DrawFPS(0, 0);
 		BeginMode2D(camera);
 		DrawGrid(100, 20);
-		
-		DrawCircle(0, 0, testVec->length(*testVec), BLUE);
+	
 		for (int i = 0; i < bodies.size(); i += 1)
 		{
-			DrawCircle(bodies[i]->position.x, bodies[i]->position.y, 50, BLUE);
+			DrawCircle(bodies[i]->position.x, bodies[i]->position.y, bodies[i]->radius, BLUE);
 		}
 		
-		DrawCircle(testBod->position.x, testBod->position.y, 5, BLUE);
 		DrawLine(0, 0, testVec->x, testVec->y, GREEN);
 
 		EndMode2D();

@@ -145,6 +145,7 @@
     <ClCompile Include="Physics Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="collisions.hpp" />
     <ClInclude Include="flatMath.hpp" />
     <ClInclude Include="flatVector.hpp" />
     <ClInclude Include="flatWorld.hpp" />
