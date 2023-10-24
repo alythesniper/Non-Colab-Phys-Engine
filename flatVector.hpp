@@ -3,14 +3,29 @@
 #include <exception>
 #include <string>
 
+#include "raylib.h"
+#include "flatTransform.hpp"
+
 const struct FlatVector {
-	
+public:
 	float x, y;
 
+	//default contstructor
+	FlatVector(){x = 0; y = 0;}
+	//overload constructor
 	FlatVector(float X, float Y)
 	{
 		x = X;
 		y = Y;
+	}
+	
+	//to Vector2
+	Vector2 toVector2()
+	{
+		Vector2 temp = { 0, 0 };
+		temp.x = this->x;
+		temp.y = this->y;
+		return temp;
 	}
 	
 	//overloading basic vector operations
@@ -61,6 +76,14 @@ const struct FlatVector {
 			//add error to future logging system
 		}
 	}
+	FlatVector* transform(FlatVector v, flatTransform transform)
+	{
+		//vector rotation fomula plus translation
+		return new FlatVector(
+		transform.Cos * v.x - transform.Sin * v.y + transform.positionx,
+		transform.Sin * v.x + transform.Cos * v.y + transform.positiony);
+	}
+
 
 	float length(FlatVector vec1)
 	{
@@ -92,3 +115,7 @@ const struct FlatVector {
 };
 
 
+namespace vectorFunc
+{
+
+}

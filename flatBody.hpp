@@ -1,6 +1,8 @@
 #pragma once
 #define _USE_MATH_DEFINES 
 #include <cmath>
+#include <vector>
+
 #include "flatVector.hpp"
 #include "flatWorld.hpp"
 
@@ -12,45 +14,114 @@ enum class shapeType
 
 class flatBody
 {
-/*private:
-	FlatVector position{ 0, 0 };
-	FlatVector linearVelocity{ 0, 0 };
-	float rotation = 0;
-	float rotationalVelocity = 0;*/
-
+private:
+	FlatVector position;
+	FlatVector linearVelocity;
+	float rotation;
+	float rotationalVelocity;
+	
+	std::vector<FlatVector> vertices;
+	std::vector<FlatVector> transformedVerticies;
+	bool transformedVerticiesNeedUpdate;
+	
 public:
+	//getters for all private variables
+	FlatVector getPosition() { return position; }
+	FlatVector getLinearVelocity() { return linearVelocity; }
+	float getRotation() { return rotation; }
+	float getRotationalVelocity() { return rotationalVelocity; }
+	bool getTransformedVerticiesNeedUpdate() { return transformedVerticiesNeedUpdate; }
+	
+	//creating required variables	
+	std::vector<int> boxTriangles;
+	float density = 0;
+	float mass = 0;
+	float restitution = 0;
+	float area = 0;
+	
+	//will not be affected by physics
+	bool isStatic = 0;
+	float radius = 0;
+	float width = 0;
+	float height = 0;
+	shapeType bodyShapeType;
+	
+	std::vector<FlatVector> createBoxVerticies(float width, float height)
+	{
+		//x and y coordinates of sides
+		float left = -width / 2;
+		float right = left + width;
+		float bottom = -height / 2;
+		float top = bottom + height;
+
+		//create vertices
+		std::vector<FlatVector> vertices;
+		vertices.push_back(FlatVector(left, top));
+		vertices.push_back(FlatVector(right, top));
+		vertices.push_back(FlatVector(right, bottom));
+		vertices.push_back(FlatVector(left, bottom));
+		
+		return vertices;
+	}
+
+	//indicies for 2 trianges that make up box(clockwise)
+	std::vector<int> triangulateBox()
+	{
+		std::vector<int> triangles;
+		triangles.push_back(0);
+		triangles.push_back(1);
+		triangles.push_back(2);
+		triangles.push_back(0);
+		triangles.push_back(2);
+		triangles.push_back(3);
+		return triangles;
+	}
+	std::vector<FlatVector> getTransformedVertices()
+	{
+		if (transformedVerticiesNeedUpdate)
+		{
+			flatTransform* transform = new flatTransform(this->position.x, this->position.y, this->rotation);
+			for (int i = 0; i < vertices.size(); i++)
+			{
+				FlatVector v = vertices[i];
+				transformedVerticies[i] = *v.transform(v, *transform);
+
+			}
+		}
+		transformedVerticiesNeedUpdate = false;
+		return transformedVerticies;
+	 }
 	flatBody(FlatVector positioni, float densityi, float massi, float restitutioni,
 		float areai, bool isStatici, float radiusi, float widthi, float heighti,
-		shapeType ShapeTypei) :
-		position(positioni), density(densityi), mass(massi), restitution(restitutioni),
+		shapeType ShapeTypei)
+		: position(positioni), density(densityi), mass(massi), restitution(restitutioni),
 		area(areai), isStatic(isStatici), radius(radiusi), width(widthi), height(heighti),
-		bodyShapeType(ShapeTypei)
-	{};
-	const float density = 0;
-	const float mass = 0;
-	const float restitution = 0;
-	const float area = 0;
-	
-	//can't be asked to make setters
-	FlatVector position{ 0, 0 };
-	FlatVector linearVelocity{ 0, 0 };
-	float rotation = 0;
-	float rotationalVelocity = 0;
+		bodyShapeType(ShapeTypei), transformedVerticiesNeedUpdate(true), rotation(0),
+		rotationalVelocity(0)
+	{
+		transformedVerticiesNeedUpdate = true;
+		// If shapetype is box, then calculate vertices
+		if (bodyShapeType == shapeType::box) {
+			vertices = createBoxVerticies(this->width, this->height);
+			boxTriangles = triangulateBox(); // Initialize boxTriangles here
+		}
+	}
 
-	//will not be affected by physics
-	const bool isStatic = 0;
-	const float radius = 0;
-	const float width = 0;
-	const float height = 0;
-	shapeType bodyShapeType;
 
 	void move(FlatVector ammounti)
 	{
-		position += ammounti;
+		this->position += ammounti;
+		this->transformedVerticiesNeedUpdate = true;
 	}
 	void moveTo(FlatVector positioni)
 	{
-		position = positioni;
+		this->position = positioni;
+		this->transformedVerticiesNeedUpdate = true;
+	}
+	void rotate(float ammount)
+	{
+		this->rotation += ammount;
+		this->transformedVerticiesNeedUpdate = true;
 	}
 };
 

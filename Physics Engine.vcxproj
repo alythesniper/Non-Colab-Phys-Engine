@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="collisions.hpp" />
     <ClInclude Include="flatMath.hpp" />
+    <ClInclude Include="flatTransform.hpp" />
     <ClInclude Include="flatVector.hpp" />
     <ClInclude Include="flatWorld.hpp" />
     <ClInclude Include="reality.hpp" />
