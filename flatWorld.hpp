@@ -14,6 +14,6 @@ public:
 
 //initialising static variables
 const float FlatWorld::minBodySize = 0.01 * 0.01;
-const float FlatWorld::maxBodySize = 64 * 64;
+const float FlatWorld::maxBodySize = 10000 * 10000;
 const float FlatWorld::minDensity = 0.2; 
 const float FlatWorld::maxDensity = 21.4;

@@ -12,9 +12,6 @@ private:
 	Camera2D camera = { 0 };
 	Camera3D camera3 = { 0 };
 
-	//creating required vectors
-	FlatVector* testVec = new FlatVector(0, 0);
-
 	//creating required bodies
 	std::vector<flatBody*> bodies;
 	
@@ -31,7 +28,8 @@ public:
 		camera.target = { 0.0f, 0.0f };
 
 		//create required bodies
-		int bodyCount = 10;
+		/*
+		int bodyCount = 2;
 		for (int i=0; i < bodyCount; i+=1)
 		{
 			int randWidth = -GetScreenWidth() / 2 + (rand() % static_cast<int>(GetScreenWidth() / 2
@@ -40,9 +38,12 @@ public:
 			int randHeight = -GetScreenHeight() / 2 + (rand() % static_cast<int>(GetScreenHeight() / 2
 				- -GetScreenHeight() / 2 + 1));
 			
-			bodies.push_back(createBoxBody(10, 5, FlatVector(randWidth, randHeight), 5, 1, 1));
-			bodies[i]->rotate((float)(rand() % 360));
+			bodies.push_back(createBoxBody(20, 20, {0,0}, 5, 1, 1));
+			bodies[i]->move({ (float)randWidth, (float)randHeight });
 		}
+		*/
+		bodies.push_back(createBoxBody(50, 50, { 0,0 }, 5, 1, 1));
+		bodies.push_back(createBoxBody(50, 50, { 80,70 }, 5, 1, 1));
 	}
 
 	//update function, runs every frame
@@ -71,7 +72,7 @@ public:
 		//object movement
 		float dx = 0;
 		float dy = 0;
-		float speed = 20;
+		float speed = 5;
 		
 		if (IsKeyDown(KEY_A)) { dx--; }
 		if (IsKeyDown(KEY_D)) { dx++; }
@@ -86,7 +87,7 @@ public:
 			bodies[0]->move(velocity);
 		}
 /*
-		//circle collision code
+		//circle collision reaction code
 		for (int i = 0; i < bodies.size()-1; i++)
 		{
 			flatBody* bodyA = bodies[i];
@@ -108,11 +109,6 @@ public:
 		}
 */
 
-		//generate block color texture
-		Image textureImage = GenImageColor(100, 100, BLUE); 
-		Texture2D texture = LoadTextureFromImage(textureImage);
-		UnloadImage(textureImage); 
-
 		//start drawing
 		BeginDrawing();
 		
@@ -120,16 +116,23 @@ public:
 		ClearBackground(LIGHTGRAY);
 		DrawFPS(0, 0);
 		BeginMode2D(camera);
-		DrawGrid(100, 20);
-	
-		for (int i = 0; i < bodies.size(); i += 1)
+		DrawLine(-1000, 0, 1000, 0, GREEN);
+		
+		for (int i = 0; i < bodies.size(); i++)
 		{
-			bodies[i]->rotate(5);
-			DrawPoly(bodies[i]->getPosition().toVector2(), 4, sqrt(pow((bodies[i]->width / 2),2) * pow((bodies[i]->height/2),2)),
-			bodies[i]->getRotation(), BLUE);
+			bodies[i]->rotate(PI / 680);
+			float radius = 0.5 * sqrt(pow(bodies[i]->width, 2) + pow(bodies[i]->height, 2));
+			DrawPoly(bodies[i]->getPosition().toVector2(), 4, radius, (bodies[i]->getRotation()*(180/PI))+45, BLUE);
+			//check for collisions
+			for (int body2 = i+1; body2 < bodies.size(); body2++)
+			{
+				if (collisions::intersectPolygons(bodies[i]->getTransformedVertices(), bodies[body2]->getTransformedVertices()))
+				{
+					DrawText("Collision", 0, 0, 20, RED);
+				}
+			}
 		}
 		
-		DrawLine(0, 0, testVec->x, testVec->y, GREEN);
 
 		EndMode2D();
 		EndDrawing();

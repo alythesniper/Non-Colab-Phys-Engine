@@ -80,12 +80,12 @@ public:
 	{
 		if (transformedVerticiesNeedUpdate)
 		{
-			flatTransform* transform = new flatTransform(this->position.x, this->position.y, this->rotation);
+			flatTransform transform(this->position.x, this->position.y, this->rotation);
+
 			for (int i = 0; i < vertices.size(); i++)
 			{
 				FlatVector v = vertices[i];
-				transformedVerticies[i] = *v.transform(v, *transform);
-
+				transformedVerticies[i] = *v.transform(v, transform);
 			}
 		}
 		transformedVerticiesNeedUpdate = false;
@@ -103,6 +103,8 @@ public:
 		// If shapetype is box, then calculate vertices
 		if (bodyShapeType == shapeType::box) {
 			vertices = createBoxVerticies(this->width, this->height);
+			//also initialise transformed vertices
+			transformedVerticies.resize((vertices.size()));
 			boxTriangles = triangulateBox(); // Initialize boxTriangles here
 		}
 	}
