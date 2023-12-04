@@ -3,7 +3,7 @@
 int main()
 {
 	//create main "reality"
-	reality* realityOne = new reality();
+	reality* realityOne = new reality(true);
 
 	//set debug output level
 	SetTraceLogLevel(LOG_ERROR);

@@ -18,6 +18,117 @@ private:
 	//vertex array
 	std::vector<Vector2> vertexBuffer;
 public:
+	//using SAT
+	bool intersectPolygonst(std::vector<FlatVector> verticesA, std::vector<FlatVector> verticesB)
+	{
+		//loop through first shape
+		for (int i = 0; i < verticesA.size(); i++)
+		{
+			//debugging code
+			for (int k = 0; k < verticesB.size(); k++)
+			{
+				FlatVector vecA = verticesB[k];
+				FlatVector vecB = verticesB[(k + 1) % verticesB.size()];
+
+				//var1 edge of polygon, var2 perpendicular to said edge
+				FlatVector edge = vecB - vecA;
+				FlatVector axis(-edge.y, edge.x); 
+				
+				DrawLine(verticesB[k].x, verticesB[k].y, verticesB[k].x + edge.x, verticesB[k].y + edge.y, BLUE);
+				printf("edge shapeB: %f, %f\n", edge.x, edge.y);
+				//draw normals of sides
+				DrawLine((verticesB[k]+(edge/2)).x, (verticesB[k] + (edge / 2)).y, (verticesB[k] + (edge / 2)).x + axis.x,
+				(verticesB[k] + (edge / 2)).y + axis.y, BLUE);
+			}
+			for (int m = 0; m < verticesB.size(); m++)
+			{
+				FlatVector vecA = verticesA[m];
+				FlatVector vecB = verticesA[(m + 1) % verticesA.size()];
+
+				//var1 edge of polygon, var2 perpendicular to said edge
+				FlatVector edge = vecB - vecA;
+				FlatVector axis(-edge.y, edge.x);
+
+				DrawLine(verticesA[m].x, verticesA[m].y, verticesA[m].x + edge.x, verticesA[m].y + edge.y, RED);
+				//print edge
+				printf("edge shapeA: %f, %f\n", edge.x, edge.y);
+				DrawLine((verticesA[m]+(edge/2)).x, (verticesA[m] + (edge / 2)).y, (verticesA[m] + (edge / 2)).x + axis.x,
+				(verticesA[m] + (edge / 2)).y + axis.y, RED);
+			}
+			
+			FlatVector vecA = verticesA[i];
+			FlatVector vecB = verticesA[(i + 1) % verticesA.size()];
+
+			//var1 edge of polygon, var2 perpendicular to said edge
+			FlatVector edge = vecB - vecA;
+			FlatVector axis(-edge.y, edge.x);
+
+			
+			float maxA = std::numeric_limits<float>::min();
+			float maxB = std::numeric_limits<float>::min();
+			float minA = std::numeric_limits<float>::max();
+			float minB = std::numeric_limits<float>::max();
+
+			//project verticies onto axis
+			for (int i = 0; i < verticesA.size(); i++)
+			{
+				float projection = flatMath::dotProd(verticesA[i], axis);
+
+				if (projection < minA) { minA = projection; }
+				else if (projection > maxA) { maxA = projection; }
+			}
+			for (int i = 0; i < verticesB.size(); i++)
+			{
+				float projection = flatMath::dotProd(verticesB[i], axis);
+
+				if (projection < minB) { minB = projection; }
+				else if (projection > maxB) { maxB = projection; }
+			}
+			if (minA >= maxB || maxA <= minB)
+			{
+			
+				return false;
+			}
+
+		}
+		//loop through second shape
+		for (int i = 0; i < verticesB.size(); i++)
+		{
+			FlatVector vecA = verticesB[i];
+			FlatVector vecB = verticesB[(i + 1) % verticesB.size()];
+
+			//var1 edge of polygon, var2 perpendicular to said edge
+			FlatVector edge = vecB - vecA;
+			FlatVector axis(-edge.y, edge.x);
+
+			float maxA = std::numeric_limits<float>::min();
+			float maxB = std::numeric_limits<float>::min();
+			float minA = std::numeric_limits<float>::max();
+			float minB = std::numeric_limits<float>::max();
+			//project verticies onto axis
+			for (int i = 0; i < verticesA.size(); i++)
+			{
+				float projection = flatMath::dotProd(verticesA[i], axis);
+
+				if (projection < minA) { minA = projection; }
+				else if (projection > maxA) { maxA = projection; }
+			}
+			for (int i = 0; i < verticesB.size(); i++)
+			{
+				float projection = flatMath::dotProd(verticesB[i], axis);
+
+				if (projection < minB) { minB = projection; }
+				else if (projection > maxB) { maxB = projection; }
+			}
+			if (minA >= maxB || maxA <= minB)
+			{
+				return false;
+			}
+
+		}
+		return true;
+
+	}
 	reality()
 	{
 		//create window and enable VSYNC
@@ -42,8 +153,17 @@ public:
 			bodies[i]->move({ (float)randWidth, (float)randHeight });
 		}
 		*/
-		bodies.push_back(createBoxBody(50, 50, { 0,0 }, 5, 1, 1));
-		bodies.push_back(createBoxBody(50, 50, { 80,70 }, 5, 1, 1));
+		bodies.push_back(createBoxBody(70, 70, { 200,200 }, 5, 1, 1));
+		bodies.push_back(createBoxBody(70, 70, { 80,70 }, 5, 1, 1));
+
+		
+	}
+	reality(bool isApi)
+	{
+		reality();
+		if (isApi == true)
+		{
+		}
 	}
 
 	//update function, runs every frame
@@ -117,16 +237,22 @@ public:
 		DrawFPS(0, 0);
 		BeginMode2D(camera);
 		DrawLine(-1000, 0, 1000, 0, GREEN);
+		DrawLine(0, -1000, 0, 1000, GREEN);
 		
 		for (int i = 0; i < bodies.size(); i++)
 		{
 			bodies[i]->rotate(PI / 680);
 			float radius = 0.5 * sqrt(pow(bodies[i]->width, 2) + pow(bodies[i]->height, 2));
 			DrawPoly(bodies[i]->getPosition().toVector2(), 4, radius, (bodies[i]->getRotation()*(180/PI))+45, BLUE);
+			//draw circles on each vertex
+			for(int j = 0; j < bodies[i]->getTransformedVertices().size(); j++)
+			{
+				DrawCircle(bodies[i]->getTransformedVertices()[j].x, bodies[i]->getTransformedVertices()[j].y, 1, RED);
+			}
 			//check for collisions
 			for (int body2 = i+1; body2 < bodies.size(); body2++)
 			{
-				if (collisions::intersectPolygons(bodies[i]->getTransformedVertices(), bodies[body2]->getTransformedVertices()))
+				if (intersectPolygonst(bodies[i]->getTransformedVertices(), bodies[body2]->getTransformedVertices()))
 				{
 					DrawText("Collision", 0, 0, 20, RED);
 				}

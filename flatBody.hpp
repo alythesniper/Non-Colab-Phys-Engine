@@ -91,13 +91,12 @@ public:
 		transformedVerticiesNeedUpdate = false;
 		return transformedVerticies;
 	 }
-	flatBody(FlatVector positioni, float densityi, float massi, float restitutioni,
+	flatBody(FlatVector positioni, float rotationi, float densityi, float massi, float restitutioni,
 		float areai, bool isStatici, float radiusi, float widthi, float heighti,
 		shapeType ShapeTypei)
-		: position(positioni), density(densityi), mass(massi), restitution(restitutioni),
+		: position(positioni), rotation(rotationi), density(densityi), mass(massi), restitution(restitutioni),
 		area(areai), isStatic(isStatici), radius(radiusi), width(widthi), height(heighti),
-		bodyShapeType(ShapeTypei), transformedVerticiesNeedUpdate(true), rotation(0),
-		rotationalVelocity(0)
+		bodyShapeType(ShapeTypei), transformedVerticiesNeedUpdate(true), rotationalVelocity(0)
 	{
 		transformedVerticiesNeedUpdate = true;
 		// If shapetype is box, then calculate vertices
@@ -128,7 +127,7 @@ public:
 };
 
 flatBody* createCircleBody(float radiusi, FlatVector positioni, float densityi, bool isStatici,
-	float restitutioni)
+	float restitutioni, float rotationi = 0)
 {
 	float area = radiusi * radiusi * M_PI;
 	float mass = area * densityi;
@@ -151,14 +150,14 @@ flatBody* createCircleBody(float radiusi, FlatVector positioni, float densityi, 
 		//do error logging
 	}
 
-	flatBody* body = new flatBody(positioni, densityi, mass, restitutioni, area, isStatici,
+	flatBody* body = new flatBody(positioni, rotationi, densityi, mass, restitutioni, area, isStatici,
 		radiusi, 0, 0, shapeType::circle);
 
 	return body;
 }
 
 flatBody* createBoxBody(float widthi, float heighti, FlatVector positioni, float densityi,
-	bool isStatici, float restitutioni)
+	bool isStatici, float restitutioni, float rotationi = 0)
 {
 	float area = widthi * heighti;
 	float mass = area * densityi;
@@ -181,7 +180,7 @@ flatBody* createBoxBody(float widthi, float heighti, FlatVector positioni, float
 		//do error logging
 	}
 
-	flatBody* body = new flatBody(positioni, densityi, mass, restitutioni, area, isStatici,
+	flatBody* body = new flatBody(positioni, rotationi, densityi, mass, restitutioni, area, isStatici,
 		0, widthi, heighti, shapeType::box);
 	return body;
 }

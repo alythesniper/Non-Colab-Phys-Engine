@@ -21,7 +21,7 @@ namespace collisions
 		}
 
 	}
-
+		
 	//using SAT
 	bool intersectPolygons(std::vector<FlatVector> verticesA, std::vector<FlatVector> verticesB)
 	{
@@ -39,7 +39,25 @@ namespace collisions
 			projectVerticies(verticesA, axis, &minA, &maxA);
 			projectVerticies(verticesB, axis, &minB, &maxB);
 
-			if (minA >= maxB || maxA <= minB) { return false; }
+			if (minA >= maxB || maxA <= minB)
+			{ 
+				//debugging output
+				printf("------------------------------------------\n");
+				printf("minA=%f, maxA=%f, minB=%f, maxB=%f\n", minA, maxA, minB, maxB);
+				printf("Axis: %f, %f\n", axis.x, axis.y);
+				//print all verticies a, verticies b
+				for (int i = 0; i < verticesA.size(); i++)
+				{
+					printf("A: %f, %f\n", verticesA[i].x, verticesA[i].y);
+				}
+				for (int i = 0; i < verticesB.size(); i++)
+				{
+					printf("B: %f, %f\n", verticesB[i].x, verticesB[i].y);
+				}
+				printf("------------------------------------------\n");
+				return false;
+			}
+			
 		}
 		//loop through second shape
 		for (int i = 0; i < verticesB.size(); i++)
@@ -56,7 +74,10 @@ namespace collisions
 			projectVerticies(verticesB, axis, &minB, &maxB);
 
 			if (minA >= maxB || maxA <= minB) 
-			{ return false; }
+			{ 
+				printf("Axis %d: minA=%f, maxA=%f, minB=%f, maxB=%f\n", i, minA, maxA, minB, maxB);
+				return false;
+			}
 			
 		}
 		return true;
