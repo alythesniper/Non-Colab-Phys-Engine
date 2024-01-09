@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{5399D9F0-1533-34AB-96F6-E4F4CB7D49C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0690A60F-28A8-30A6-9258-F5DA835E361D} = {0690A60F-28A8-30A6-9258-F5DA835E361D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vcxproj", "{0690A60F-28A8-30A6-9258-F5DA835E361D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|win32 = Debug|win32
+		Release|win32 = Release|win32
+		MinSizeRel|win32 = MinSizeRel|win32
+		RelWithDebInfo|win32 = RelWithDebInfo|win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5399D9F0-1533-34AB-96F6-E4F4CB7D49C8}.Debug|win32.ActiveCfg = Debug|win32
+		{5399D9F0-1533-34AB-96F6-E4F4CB7D49C8}.Release|win32.ActiveCfg = Release|win32
+		{5399D9F0-1533-34AB-96F6-E4F4CB7D49C8}.MinSizeRel|win32.ActiveCfg = MinSizeRel|win32
+		{5399D9F0-1533-34AB-96F6-E4F4CB7D49C8}.RelWithDebInfo|win32.ActiveCfg = RelWithDebInfo|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.Debug|win32.ActiveCfg = Debug|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.Debug|win32.Build.0 = Debug|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.Release|win32.ActiveCfg = Release|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.Release|win32.Build.0 = Release|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.MinSizeRel|win32.ActiveCfg = MinSizeRel|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.MinSizeRel|win32.Build.0 = MinSizeRel|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.RelWithDebInfo|win32.ActiveCfg = RelWithDebInfo|win32
+		{0690A60F-28A8-30A6-9258-F5DA835E361D}.RelWithDebInfo|win32.Build.0 = RelWithDebInfo|win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C426801-0C26-369F-89DB-6D3170916C42}
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -61,6 +61,12 @@ public:
 	{
 		return FlatVector(x / b, y / b);
 	}
+	FlatVector& operator/=(const float& scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+		return *this;
+	}
 	bool operator == (FlatVector& b)
 	{
 		//checks if operand is FlatVector Type
