@@ -39,7 +39,7 @@ public:
 	}
 	FlatVector operator += (const FlatVector& b)
 	{
-		this->x += b.x;
+	this->x += b.x;
 		this->y += b.y;
 		return FlatVector(x + b.x, y + b.y);
 	}
@@ -56,6 +56,14 @@ public:
 	FlatVector operator * (const float& b)
 	{
 		return FlatVector(x * b, y * b);
+	}
+	FlatVector operator * (const FlatVector& b)
+	{
+		return FlatVector(x * b.x, y * b.y);
+	}
+	friend FlatVector operator * (const float& a, const FlatVector& v)
+	{
+		return FlatVector(a * v.x, a * v.y);
 	}
 	FlatVector operator / (const float& b)
 	{

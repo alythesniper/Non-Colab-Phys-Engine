@@ -1,7 +1,14 @@
 #include "reality.hpp"
+#include <chrono>
+
+auto lastTime = std::chrono::high_resolution_clock::now();
 
 int main()
 {
+	//get time since last frame
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	float deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - lastTime).count();
+	
 	//create main "reality"
 	reality* realityOne = new reality();
 
@@ -11,7 +18,7 @@ int main()
 	//game loop, exits if <esc> pressed
 	while (true)
 	{
-		realityOne->update();
+		realityOne->update(deltaTime);
 		if (IsKeyDown(KEY_ESCAPE))
 		{
 			delete realityOne;

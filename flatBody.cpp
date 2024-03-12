@@ -2,9 +2,15 @@
 #define _USE_MATH_DEFINES 
 #include <cmath>
 #include <vector>
+#include <fstream>
 
 #include "flatVector.hpp"
-#include "flatWorld.hpp"
+
+
+const float minBodySize = 0.01 * 0.01;
+const float maxBodySize = 10000 * 10000;
+const float minDensity = 0.2;
+const float maxDensity = 21.4;
 
 enum class shapeType
 {
@@ -12,9 +18,18 @@ enum class shapeType
 	box
 };
 
+void logError(const std::string& message) 
+{
+	std::ofstream logFile;
+	logFile.open("error_log.txt", std::ios_base::app); // Append to the existing file
+	logFile << message << std::endl;
+	logFile.close();
+}
+
 class flatBody
 {
 private:
+	FlatVector force;
 	FlatVector position;
 	FlatVector linearVelocity;
 	float rotation;
@@ -97,12 +112,13 @@ public:
 		: position(positioni), density(densityi), mass(massi), restitution(restitutioni),
 		area(areai), isStatic(isStatici), radius(radiusi), width(widthi), height(heighti),
 		bodyShapeType(ShapeTypei), transformedVerticiesNeedUpdate(true), rotation(0),
-		rotationalVelocity(0)
+		rotationalVelocity(0), force(0, 0)
 	{
 		transformedVerticiesNeedUpdate = true;
 		// If shapetype is box, then calculate vertices
 		if (bodyShapeType == shapeType::box) {
 			vertices = createBoxVerticies(this->width, this->height);
+			
 			//also initialise transformed vertices
 			transformedVerticies.resize((vertices.size()));
 			boxTriangles = triangulateBox(); // Initialize boxTriangles here
@@ -110,6 +126,16 @@ public:
 	}
 
 
+	void step(float time)
+	{
+		this->linearVelocity += this->force * time;
+		
+		this->position += this->linearVelocity * time;
+		this->rotation += this->rotationalVelocity * time;
+
+		this->force = FlatVector(0, 0);
+		this->transformedVerticiesNeedUpdate = true;
+	}
 	void move(FlatVector ammounti)
 	{
 		this->position += ammounti;
@@ -125,6 +151,14 @@ public:
 		this->rotation += ammount;
 		this->transformedVerticiesNeedUpdate = true;
 	}
+	void addForce(FlatVector forcei)
+	{
+		this->force += forcei;
+	}
+	void setLinearVelocity(FlatVector velocity)
+	{
+		this->linearVelocity = velocity;
+	}
 };
 
 flatBody* createCircleBody(float radiusi, FlatVector positioni, float densityi, bool isStatici,
@@ -133,22 +167,22 @@ flatBody* createCircleBody(float radiusi, FlatVector positioni, float densityi, 
 	float area = radiusi * radiusi * M_PI;
 	float mass = area * densityi;
 
-	if (area < FlatWorld::minBodySize)
+	if (area < minBodySize)
 	{
+		logError("Error: Body size is less than minimum allowed size.");
 		return nullptr;
-		//do error logging
 	}
 
-	if (area > FlatWorld::maxBodySize)
+	if (area > maxBodySize)
 	{
+		logError("Error: Body size is greater than maximum allowed size.");
 		return nullptr;
-		//do error logging
 	}
 
-	if (densityi < FlatWorld::minDensity)
+	if (densityi < minDensity)
 	{
+		logError("Error: Density is less than minimum allowed density.");
 		return nullptr;
-		//do error logging
 	}
 
 	flatBody* body = new flatBody(positioni, densityi, mass, restitutioni, area, isStatici,
@@ -163,22 +197,22 @@ flatBody* createBoxBody(float widthi, float heighti, FlatVector positioni, float
 	float area = widthi * heighti;
 	float mass = area * densityi;
 
-	if (area < FlatWorld::minBodySize)
+	if (area < minBodySize)
 	{
+		logError("Error: Body size is less than minimum allowed size.");
 		return nullptr;
-		//do error logging
 	}
 
-	if (area > FlatWorld::maxBodySize)
+	if (area > maxBodySize)
 	{
+		logError("Error: Body size is greater than maximum allowed size.");
 		return nullptr;
-		//do error logging
 	}
 
-	if (densityi < FlatWorld::minDensity)
+	if (densityi < minDensity)
 	{
+		logError("Error: Density is less than minimum allowed density.");
 		return nullptr;
-		//do error logging
 	}
 
 	flatBody* body = new flatBody(positioni, densityi, mass, restitutioni, area, isStatici,

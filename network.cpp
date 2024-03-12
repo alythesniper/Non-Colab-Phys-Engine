@@ -28,19 +28,6 @@ void ArrayReceiver::handle_read(const boost::system::error_code& error, std::siz
 {
     if (!error)
     {
-        /*
-        std::vector<float> array; 
-        for (std::size_t i = 0; i < bytes_transferred; i += sizeof(float))  
-        {
-            float number;
-            std::memcpy(&number, static_cast<const char*>(boost::asio::buffer_cast<const void*>(recv_buffer_.data())) + i, sizeof(float));
-            array.push_back(number);
-        }
-        recv_buffer_.consume(bytes_transferred * sizeof(float));
-        big_array_.push_back(array);
-        recv_count++;
-        */
-
         std::vector<float> array1;  
         std::vector<float> array2; 
         for (std::size_t i = 0; i < bytes_transferred; i += sizeof(float)) 
@@ -59,21 +46,10 @@ void ArrayReceiver::handle_read(const boost::system::error_code& error, std::siz
         big_array_.push_back(array2);
         recv_count += 2;
 
-        /*print out big_array
-		std::cout << "Received array: ";
-		for (auto& array : big_array_)
-		{
-			for (auto& number : array)
-			{
-			    std::cout << number << " ";
-			}
-			std::cout << std::endl;
-		}
-        */
-
-        boost::asio::write(socket_, boost::asio::buffer("Successfull\n"));
+        boost::asio::write(socket_, boost::asio::buffer(&collideState, sizeof(collideState)));
+        collideState = false;
         socket_.close();
-        start(); // Start waiting for the next connection
+        start(); //start waiting for the next connection
     }
     else
     {

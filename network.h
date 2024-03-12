@@ -13,6 +13,8 @@ public:
     int recv_count = 0;
     std::vector<std::vector<float>> big_array_;
 
+    bool collideState = false;
+
 private:
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::acceptor acceptor_;

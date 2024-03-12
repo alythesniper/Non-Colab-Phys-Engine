@@ -32,7 +32,7 @@
     <ClInclude Include="flatVector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="flatBody.hpp">
+    <ClInclude Include="flatBody.cpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="flatWorld.hpp">
